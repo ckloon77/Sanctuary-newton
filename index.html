@@ -6,76 +6,255 @@
     <title>Sanctuary @ Newton | Exclusive Freehold</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- FONTS: Cormorant Garamond & Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            400: '#D4AF37',
-                            500: '#C5A028',
-                            600: '#B49018',
-                        },
-                        xmas: {
-                            red: '#D42426',
-                            green: '#165B33'
-                        }
+                        oak: { DEFAULT: '#9C8C74', light: '#B5A693', dark: '#857560' },
+                        matte: { DEFAULT: '#333333', light: '#4D4D4D' },
+                        stone: { DEFAULT: '#E6E3DD', 50: '#F5F4F2', 100: '#E6E3DD', 200: '#D6D1C9' }
                     },
                     fontFamily: {
-                        serif: ['"Playfair Display"', 'serif'],
-                        sans: ['"Lato"', 'sans-serif'],
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Montserrat"', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        widest: '.2em',
                     }
                 }
             }
         }
     </script>
     <style>
-        .gradient-text {
-            background: linear-gradient(to right, #C5A028, #E5C568, #C5A028);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        /* Hero Background */
         .hero-bg {
-            /* Background: Using the uploaded sanctuary hero shot with a stronger overlay for legibility */
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('sanctuary hero shot.jpg');
+            background-image: linear-gradient(rgba(51, 51, 51, 0.6), rgba(51, 51, 51, 0.8)), url('sanctuary hero shot.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: scroll; 
         }
         
         .video-overlay {
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            background: linear-gradient(to top, rgba(51, 51, 51, 0.95), transparent);
         }
+
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
+            background: #E6E3DD; 
         }
         ::-webkit-scrollbar-thumb {
-            background: #C5A028; 
+            background: #9C8C74; 
             border-radius: 4px;
+        }
+
+        /* --- MASCOT ANIMATION LOGIC --- */
+
+        @keyframes perimeter-path {
+            /* 0s - 15s: Move UP along LEFT edge */
+            0%   { left: 0; top: calc(100vh - 90px); } 
+            25%  { left: 0; top: 0; }
+            
+            /* 15s - 30s: Move RIGHT along TOP edge */
+            50%  { left: calc(100vw - 80px); top: 0; } 
+            
+            /* 30s - 45s: Move DOWN along RIGHT edge */
+            75%  { left: calc(100vw - 80px); top: calc(100vh - 90px); }
+            
+            /* 45s - 60s: Move LEFT along BOTTOM edge */
+            100% { left: 0; top: calc(100vh - 90px); }
+        }
+
+        @keyframes perimeter-rotate {
+            0%    { transform: rotate(90deg); }
+            24.9% { transform: rotate(90deg); }
+            25%   { transform: rotate(180deg); }
+            49.9% { transform: rotate(180deg); }
+            50%   { transform: rotate(270deg); }
+            74.9% { transform: rotate(270deg); }
+            75%   { transform: rotate(0deg); }
+            100%  { transform: rotate(0deg); }
+        }
+        
+        @keyframes walk-bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes alarm-shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-5deg); }
+            20% { transform: translate(-3px, 0px) rotate(5deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(5deg); }
+            50% { transform: translate(-1px, 2px) rotate(-5deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-5deg); }
+            80% { transform: translate(-1px, -1px) rotate(5deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-5deg); }
+        }
+
+        /* NEW ANIMATION: Super High Jump (> 90px) */
+        @keyframes high-jump {
+            0% { transform: translateY(0) scale(1, 1); }
+            20% { transform: translateY(20px) scale(1.2, 0.8); } /* Crouch */
+            50% { transform: translateY(-200px) scale(0.9, 1.1); } /* Jump Peak (200px!) */
+            100% { transform: translateY(0) scale(1, 1); } /* Land */
+        }
+
+        .mascot-container {
+            position: fixed;
+            width: 80px;  
+            height: 90px; 
+            z-index: 100;
+            animation: perimeter-path 60s linear infinite;
+            pointer-events: auto;
+            cursor: pointer;
+        }
+
+        .mascot-rotator {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: perimeter-rotate 60s linear infinite;
+        }
+
+        .mascot-svg-body {
+            animation: walk-bounce 0.5s ease-in-out infinite;
+            transition: transform 0.2s;
+        }
+
+        .mascot-svg-body.is-jumping {
+            animation: high-jump 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+        }
+
+        .mascot-alarm-bubble {
+            position: absolute;
+            background-color: #333333; /* Matte */
+            color: #E6E3DD; /* Stone */
+            padding: 20px 30px; /* Larger padding */
+            border-radius: 30px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800; 
+            font-size: 18px; /* Larger Text */
+            line-height: 1.2;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            border: 4px solid #9C8C74; /* Oak */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            z-index: 110; 
+            pointer-events: none;
+            min-width: 200px; /* Enforce largeness */
+            text-align: center;
+            /* Default Center position (will be overridden by JS) */
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
+        
+        /* Triangle pointer - Dynamic positioning classes */
+        /* Increased distances (140%) to ensure it does not cover the mascot */
+        .mascot-alarm-bubble.bubble-right { left: 140%; top: 50%; transform: translateY(-50%); }
+        .mascot-alarm-bubble.bubble-left { right: 140%; top: 50%; transform: translateY(-50%); left: auto; }
+        .mascot-alarm-bubble.bubble-top { bottom: 140%; left: 50%; transform: translateX(-50%); top: auto; }
+        .mascot-alarm-bubble.bubble-bottom { top: 140%; left: 50%; transform: translateX(-50%); }
+
+        .mascot-rotator.is-alarming {
+            animation: alarm-shake 0.1s linear infinite !important; 
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="font-sans text-gray-800 bg-gray-50 antialiased">
+<body class="font-sans text-matte bg-stone-100 antialiased selection:bg-oak selection:text-white">
 
-    <!-- Navigation / Language Toggle -->
-    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+    <!-- Mascot Wrapper -->
+    <div class="mascot-container" id="mascotContainer">
+        <!-- Bubble is OUTSIDE the rotator so it stays upright -->
+        <div id="alarmBubble" class="mascot-alarm-bubble">It's 12:00!</div>
+        
+        <div class="mascot-rotator" id="mascotRotator">
+            <svg id="mascotSvg" viewBox="0 0 200 260" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-2xl mascot-svg-body">
+                <defs>
+                    <linearGradient id="bronzeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#D99A75;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#A06040;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#603020;stop-opacity:1" />
+                    </linearGradient>
+                    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#4FD1C5;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#1F6369;stop-opacity:1" />
+                    </linearGradient>
+                    <radialGradient id="faceGrad" cx="50%" cy="50%" r="50%" fx="30%" fy="30%">
+                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                        <stop offset="90%" style="stop-color:#f0ebe5;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#dcd5cd;stop-opacity:1" />
+                    </radialGradient>
+                    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#F5E6D3;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#D4BFA5;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#A89070;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <path d="M40 150 Q 10 170 20 200" stroke="url(#tealGrad)" stroke-width="12" fill="none" stroke-linecap="round"/>
+                <ellipse cx="70" cy="230" rx="18" ry="12" fill="#1F6369"/>
+                <ellipse cx="130" cy="230" rx="18" ry="12" fill="#1F6369"/>
+                <path d="M40 80 A 35 30 0 0 1 80 50" fill="url(#bronzeGrad)" />
+                <rect x="55" y="45" width="10" height="15" fill="#804030" />
+                <path d="M120 50 A 35 30 0 0 1 160 80" fill="url(#bronzeGrad)" />
+                <rect x="135" y="45" width="10" height="15" fill="#804030" />
+                <rect x="95" y="35" width="10" height="20" fill="#D99A75" rx="2"/>
+                <circle cx="100" cy="140" r="75" fill="url(#bodyGrad)"/>
+                <circle cx="100" cy="140" r="65" fill="#ffffff" stroke="#C0A080" stroke-width="2"/>
+                <circle cx="100" cy="140" r="65" fill="url(#faceGrad)" opacity="0.8"/>
+                <path d="M165 150 Q 190 130 185 100" stroke="url(#tealGrad)" stroke-width="12" fill="none" stroke-linecap="round"/>
+                <g stroke="#804030" stroke-width="2" fill="rgba(255,255,255,0.2)">
+                    <circle cx="75" cy="135" r="22"/>
+                    <circle cx="125" cy="135" r="22"/>
+                    <line x1="97" y1="135" x2="103" y2="135" stroke-width="3"/>
+                    <path d="M53 135 L 30 140" stroke="none" fill="none" stroke-width="2"/>
+                    <path d="M147 135 L 170 140" stroke="none" fill="none" stroke-width="2"/>
+                </g>
+                <circle cx="75" cy="135" r="5" fill="#333"/>
+                <path d="M118 135 Q 125 130 132 135" stroke="#333" stroke-width="3" fill="none"/>
+                <path d="M90 160 Q 100 168 110 160" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <g transform="translate(0, -10) rotate(-10, 100, 50)">
+                    <path d="M50 70 C 50 70 90 -10 120 10 C 140 30 160 80 160 80" fill="#333333" /> 
+                    <path d="M40 70 L 160 70 L 160 90 L 40 90 Z" fill="#E6E3DD" rx="10" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/> 
+                    <circle cx="120" cy="10" r="14" fill="#E6E3DD" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.2))"/> 
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Navigation (Mobile Optimized) -->
+    <nav class="fixed w-full z-50 bg-stone-100/95 backdrop-blur-md shadow-sm transition-all duration-300 border-b border-stone-200">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-20">
-                <div class="flex items-center">
-                    <span class="text-2xl font-serif font-bold text-gray-900 tracking-wider">SANCTUARY<span class="text-gold-500">@NEWTON</span></span>
+            <div class="flex justify-between items-center h-16 sm:h-24">
+                <div class="flex items-center shrink-0">
+                    <span class="text-xl sm:text-3xl font-serif font-light text-matte tracking-widest truncate">SANCTUARY<span class="text-oak font-normal">@NEWTON</span></span>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button onclick="setLang('en')" class="px-3 py-1 text-sm font-semibold rounded-full border border-gray-300 hover:border-gold-500 hover:text-gold-500 transition active-lang" id="btn-en">EN</button>
-                    <button onclick="setLang('cn')" class="px-3 py-1 text-sm font-semibold rounded-full border border-gray-300 hover:border-gold-500 hover:text-gold-500 transition" id="btn-cn">中文</button>
-                    <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20I'm%20interested%20in%20Sanctuary%20@%20Newton" class="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition shadow-lg transform hover:scale-105">
-                        <i class="fab fa-whatsapp text-lg"></i>
-                        <span>WhatsApp</span>
+                <div class="flex items-center space-x-2 sm:space-x-6 shrink-0">
+                    <button onclick="setLang('en')" class="px-2 py-1 sm:px-4 text-[10px] sm:text-xs font-medium tracking-widest rounded-full border border-stone-200 hover:border-oak hover:text-oak transition active-lang uppercase" id="btn-en">En</button>
+                    <button onclick="setLang('cn')" class="px-2 py-1 sm:px-4 text-[10px] sm:text-xs font-medium tracking-widest rounded-full border border-stone-200 hover:border-oak hover:text-oak transition uppercase" id="btn-cn">中文</button>
+                    
+                    <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20I'm%20interested%20in%20Sanctuary%20@%20Newton" class="flex bg-matte hover:bg-black text-white px-3 py-2 sm:px-6 sm:py-3 rounded-none items-center gap-2 sm:gap-3 transition shadow-lg transform hover:scale-105">
+                        <i class="fab fa-whatsapp text-sm sm:text-lg"></i>
+                        <span class="uppercase tracking-widest text-[10px] sm:text-xs font-semibold">Inquire</span>
                     </a>
                 </div>
             </div>
@@ -85,204 +264,203 @@
     <!-- Hero Section -->
     <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
         
-        <div class="absolute top-24 right-4 animate-bounce">
-            <span class="bg-xmas-red text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">
-                <i class="fas fa-gift mr-1"></i> <span data-key="badge">Limited Xmas Offer</span>
+        <div class="absolute top-20 right-4 sm:top-28 sm:right-8 animate-bounce z-20">
+            <span class="bg-oak text-white text-[9px] sm:text-[10px] font-bold px-3 py-1.5 sm:px-4 sm:py-2 rounded-none shadow-lg uppercase tracking-[0.2em]">
+                <i class="fas fa-gift mr-2"></i> <span data-key="badge">Limited Xmas Offer</span>
             </span>
         </div>
         
-        <div class="max-w-4xl mx-auto text-white relative z-10" data-aos="fade-up">
-            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 leading-tight drop-shadow-lg">
-                <span data-key="headline_1">Christmas Bonus Gifts</span> <br/>
-                <span class="text-gold-400" data-key="headline_2">+ Final Units at Sanctuary @ Newton!</span>
+        <div class="max-w-5xl mx-auto text-white relative z-10 fade-in-up mt-10 sm:mt-0">
+            <h1 class="text-3xl sm:text-5xl md:text-7xl font-serif font-light mb-4 sm:mb-8 leading-tight drop-shadow-lg">
+                <span data-key="headline_1" class="block mb-2">Christmas Bonus Gifts</span>
+                <span class="text-oak-light italic" data-key="headline_2">+ Final Units at Sanctuary @ Newton!</span>
             </h1>
-            <p class="text-lg md:text-xl font-light mb-8 opacity-90 max-w-2xl mx-auto drop-shadow-md" data-key="subheadline">
-                Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11!
+            <p class="text-sm sm:text-lg md:text-xl font-sans font-light mb-8 sm:mb-12 opacity-90 max-w-2xl mx-auto drop-shadow-md text-stone-100 tracking-wide leading-relaxed px-4" data-key="subheadline">
+                Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11.
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#units" class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl transition transform hover:-translate-y-1">
-                    <i class="fas fa-home mr-2"></i> <span data-key="cta_units">View Available Units</span>
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center px-8">
+                <a href="#units" class="bg-oak hover:bg-oak-dark text-white font-medium py-3 px-6 sm:py-4 sm:px-10 rounded-none shadow-xl transition transform hover:-translate-y-1 uppercase tracking-widest text-xs w-full sm:w-auto">
+                    <span data-key="cta_units">View Units</span>
                 </a>
-                <a href="https://wa.me/6591860119" class="bg-white/10 backdrop-blur-sm border border-white hover:bg-white hover:text-gray-900 text-white font-bold py-4 px-8 rounded-lg shadow-xl transition transform hover:-translate-y-1">
-                    <i class="fas fa-phone mr-2"></i> <span data-key="cta_contact">Contact Kar Loon</span>
+                <a href="https://wa.me/6591860119" class="bg-transparent backdrop-blur-md border border-stone-200 hover:bg-white hover:text-matte text-white font-medium py-3 px-6 sm:py-4 sm:px-10 rounded-none shadow-xl transition transform hover:-translate-y-1 uppercase tracking-widest text-xs w-full sm:w-auto">
+                    <span data-key="cta_contact">Contact Kar Loon</span>
                 </a>
             </div>
             
-            <div class="mt-12 p-4 bg-white/10 backdrop-blur-md rounded-xl inline-block border border-white/20">
-                <p class="text-gold-300 font-bold uppercase tracking-widest text-sm mb-2" data-key="promo_title">Flash Deal</p>
-                <p class="font-semibold text-white" data-key="promo_desc">🔥 Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)</p>
+            <div class="mt-8 sm:mt-16 p-4 sm:p-6 bg-matte/40 backdrop-blur-md rounded-none inline-block border-l-2 border-oak mx-4">
+                <p class="text-oak-light font-bold uppercase tracking-[0.25em] text-[10px] sm:text-xs mb-2 sm:mb-3" data-key="promo_title">Flash Deal</p>
+                <p class="font-light text-white text-sm sm:text-lg font-serif italic" data-key="promo_desc">Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)</p>
             </div>
         </div>
     </header>
 
     <!-- Video/Visuals Section -->
-    <section class="py-20 bg-white">
+    <section class="py-12 sm:py-24 bg-stone-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4" data-key="video_title">Actual Unit Previews</h2>
-                <div class="w-24 h-1 bg-gold-500 mx-auto rounded-full"></div>
-                <p class="mt-6 text-xl text-gray-600 italic font-serif" data-key="video_warmth">
+            <div class="text-center mb-12 sm:mb-20">
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-serif font-light text-matte mb-4 sm:mb-6 tracking-wide" data-key="video_title">Actual Unit Previews</h2>
+                <div class="w-16 h-0.5 bg-oak mx-auto"></div>
+                <p class="mt-6 sm:mt-8 text-lg sm:text-xl text-matte-light font-light tracking-wide font-sans" data-key="video_warmth">
                     "A sneak peek at our featured homes. We have more units available for you to explore."
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Video Card 1: #04-01 -->
-                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
-                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
-                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
-                            <i class="fa-regular fa-map text-4xl text-gold-500 group-hover:text-white"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10">
+                <!-- Video Cards (Unchanged logic, styles responsive) -->
+                <!-- Card 1 -->
+                <div class="group relative overflow-hidden rounded-none border border-stone-200 bg-white shadow-sm cursor-pointer hover:shadow-xl hover:border-oak transition-all duration-500" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
+                    <div class="h-64 sm:h-72 flex flex-col items-center justify-center p-6 sm:p-8 bg-white">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-stone-50 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                            <i class="fa-regular fa-map text-2xl sm:text-3xl text-oak group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#04-01</h3>
-                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_3br">3-Bedroom</p>
+                        <h3 class="text-matte font-serif font-normal text-2xl sm:text-3xl tracking-wider group-hover:text-oak transition">#04-01</h3>
+                        <p class="text-gray-400 text-xs uppercase tracking-[0.2em] mt-3 font-medium" data-key="type_3br">3-Bedroom</p>
                     </div>
-                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
-                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
+                    <div class="bg-white p-3 sm:p-4 text-center border-t border-stone-100 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Watch Video Tour</span>
                     </div>
                 </div>
 
-                <!-- Video Card 2: #04-03 -->
-                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
-                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
-                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
-                            <i class="fa-solid fa-layer-group text-4xl text-gold-500 group-hover:text-white"></i>
+                <!-- Card 2 -->
+                <div class="group relative overflow-hidden rounded-none border border-stone-200 bg-white shadow-sm cursor-pointer hover:shadow-xl hover:border-oak transition-all duration-500" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
+                    <div class="h-64 sm:h-72 flex flex-col items-center justify-center p-6 sm:p-8 bg-white">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-stone-50 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                            <i class="fa-solid fa-layer-group text-2xl sm:text-3xl text-oak group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#04-03</h3>
-                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_2br">2-Bedroom</p>
+                        <h3 class="text-matte font-serif font-normal text-2xl sm:text-3xl tracking-wider group-hover:text-oak transition">#04-03</h3>
+                        <p class="text-gray-400 text-xs uppercase tracking-[0.2em] mt-3 font-medium" data-key="type_2br">2-Bedroom</p>
                     </div>
-                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
-                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
+                    <div class="bg-white p-3 sm:p-4 text-center border-t border-stone-100 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Watch Video Tour</span>
                     </div>
                 </div>
 
-                <!-- Video Card 3: #11-02 -->
-                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
-                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
-                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
-                            <i class="fa-solid fa-ruler-combined text-4xl text-gold-500 group-hover:text-white"></i>
+                <!-- Card 3 -->
+                <div class="group relative overflow-hidden rounded-none border border-stone-200 bg-white shadow-sm cursor-pointer hover:shadow-xl hover:border-oak transition-all duration-500" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
+                    <div class="h-64 sm:h-72 flex flex-col items-center justify-center p-6 sm:p-8 bg-white">
+                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-stone-50 flex items-center justify-center mb-4 sm:mb-6 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                            <i class="fa-solid fa-ruler-combined text-2xl sm:text-3xl text-oak group-hover:text-white"></i>
                         </div>
-                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#11-02</h3>
-                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_2br">2-Bedroom</p>
+                        <h3 class="text-matte font-serif font-normal text-2xl sm:text-3xl tracking-wider group-hover:text-oak transition">#11-02</h3>
+                        <p class="text-gray-400 text-xs uppercase tracking-[0.2em] mt-3 font-medium" data-key="type_2br">2-Bedroom</p>
                     </div>
-                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
-                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
+                    <div class="bg-white p-3 sm:p-4 text-center border-t border-stone-100 group-hover:bg-oak group-hover:text-white transition-colors duration-500">
+                        <span class="text-[10px] font-bold uppercase tracking-[0.2em]">Watch Video Tour</span>
                     </div>
                 </div>
             </div>
             
-            <div class="text-center mt-12">
-                <a href="https://wa.me/6591860119?text=Can%20send%20me%20the%20actual%20unit%20videos%20for%20Sanctuary?" class="inline-flex items-center text-gray-400 font-bold hover:text-gold-600 transition text-sm">
-                    <span data-key="request_video">See full video list via WhatsApp</span> <i class="fas fa-chevron-right ml-2 text-xs"></i>
+            <div class="text-center mt-12 sm:mt-16">
+                <a href="https://wa.me/6591860119?text=Can%20send%20me%20the%20actual%20unit%20videos%20for%20Sanctuary?" class="inline-flex items-center text-matte-light font-medium hover:text-oak transition text-xs uppercase tracking-widest border-b border-stone-300 pb-1 hover:border-oak text-center">
+                    <span data-key="request_video">See full video list via WhatsApp</span>
                 </a>
             </div>
         </div>
     </section>
 
     <!-- Key Selling Points -->
-    <section class="py-16 bg-gray-50 border-y border-gray-200">
+    <section class="py-12 sm:py-20 bg-white border-y border-stone-200">
         <div class="max-w-6xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 text-center">
+                <div class="bg-stone-50 p-6 sm:p-10 rounded-none transition hover:bg-stone-100">
+                    <div class="w-12 h-12 bg-white text-oak rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-xl border border-stone-200">
                         <i class="fas fa-check"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2" data-key="usp_1">Actual Viewing</h3>
-                    <p class="text-gray-500 text-sm" data-key="usp_1_desc">Actual unit viewing available now onsite.</p>
+                    <h3 class="font-serif font-medium text-lg sm:text-xl mb-3 text-matte tracking-wide" data-key="usp_1">Actual Viewing</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed" data-key="usp_1_desc">Actual unit viewing available now onsite.</p>
                 </div>
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
-                    <div class="w-12 h-12 bg-gold-100 text-gold-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                <div class="bg-stone-50 p-6 sm:p-10 rounded-none transition hover:bg-stone-100">
+                    <div class="w-12 h-12 bg-white text-oak rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-xl border border-stone-200">
                         <i class="fas fa-tag"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2" data-key="usp_2">Motivated Seller</h3>
-                    <p class="text-gray-500 text-sm" data-key="usp_2_desc">Genuine motivated seller pricing for fast deal.</p>
+                    <h3 class="font-serif font-medium text-lg sm:text-xl mb-3 text-matte tracking-wide" data-key="usp_2">Motivated Seller</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed" data-key="usp_2_desc">Genuine motivated seller pricing for fast deal.</p>
                 </div>
-                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-xmas-red text-white text-[10px] px-2 py-1 font-bold">DEC 1-15</div>
-                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                <div class="bg-stone-50 p-6 sm:p-10 rounded-none transition hover:bg-stone-100 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-matte text-white text-[9px] px-3 py-1.5 font-bold tracking-widest uppercase">Dec 1-15</div>
+                    <div class="w-12 h-12 bg-white text-oak rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 text-xl border border-stone-200">
                         <i class="fas fa-gift"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2" data-key="usp_3">Festive Discount</h3>
-                    <p class="text-gray-500 text-sm" data-key="usp_3_desc">Additional festive discount for immediate bookings.</p>
+                    <h3 class="font-serif font-medium text-lg sm:text-xl mb-3 text-matte tracking-wide" data-key="usp_3">Festive Discount</h3>
+                    <p class="text-gray-500 text-sm font-light leading-relaxed" data-key="usp_3_desc">Additional festive discount for immediate bookings.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Units Section -->
-    <section id="units" class="py-20 bg-gray-900 text-white">
+    <section id="units" class="py-16 sm:py-24 bg-matte text-stone-100">
         <div class="max-w-5xl mx-auto px-4">
-            <h2 class="text-3xl font-serif font-bold text-center mb-12 text-gold-400" data-key="units_title">Final Inventory</h2>
+            <h2 class="text-3xl sm:text-4xl font-serif font-light text-center mb-10 sm:mb-16 text-stone-200 tracking-wider" data-key="units_title">Final Inventory</h2>
             
-            <div class="space-y-6">
+            <div class="space-y-6 sm:space-y-8">
                 <!-- Unit Type 1 -->
-                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500">
-                    <div class="mb-4 md:mb-0">
-                        <h3 class="text-xl font-bold flex items-center gap-2">
-                            💎 <span data-key="unit_2br">Final 4 × 2BR units</span>
+                <div class="bg-white/5 rounded-none p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between border-l-2 border-oak hover:bg-white/10 transition duration-500 text-center md:text-left">
+                    <div class="mb-6 md:mb-0">
+                        <h3 class="text-xl sm:text-2xl font-serif font-light flex items-center justify-center md:justify-start gap-3">
+                            <span class="text-oak">💎</span> <span data-key="unit_2br">Final 4 × 2BR units</span>
                         </h3>
-                        <p class="text-gray-400 mt-1" data-key="unit_2br_desc">Stack 2 open for offers!</p>
+                        <p class="text-stone-400 mt-2 font-light text-sm tracking-wide" data-key="unit_2br_desc">Stack 2 open for offers!</p>
                     </div>
-                    <a href="https://wa.me/6591860119?text=Interested%20in%202BR%20Stack%202" class="px-6 py-2 border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white rounded transition text-sm font-bold uppercase" data-key="make_offer">Make Offer</a>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%202BR%20Stack%202" class="w-full md:w-auto px-8 py-3 border border-oak text-oak hover:bg-oak hover:text-white rounded-none transition text-xs font-semibold uppercase tracking-[0.15em]" data-key="make_offer">Make Offer</a>
                 </div>
 
                 <!-- Unit Type 2 -->
-                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500 relative overflow-hidden">
-                    <div class="absolute -right-4 -top-4 bg-xmas-red w-20 h-20 transform rotate-45"></div>
-                    <div class="absolute top-1 right-1 text-white text-xs font-bold"><i class="fas fa-star"></i></div>
+                <div class="bg-white/5 rounded-none p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between border-l-2 border-oak relative overflow-hidden hover:bg-white/10 transition duration-500 text-center md:text-left">
+                    <div class="absolute -right-4 -top-4 bg-oak w-20 h-20 transform rotate-45 opacity-80"></div>
+                    <div class="absolute top-1 right-1 text-white text-[10px] font-bold"><i class="fas fa-star"></i></div>
                     
-                    <div class="mb-4 md:mb-0">
-                        <h3 class="text-xl font-bold flex items-center gap-2">
-                            💎 <span data-key="unit_3br">Only 3 × 3BR left</span>
+                    <div class="mb-6 md:mb-0">
+                        <h3 class="text-xl sm:text-2xl font-serif font-light flex items-center justify-center md:justify-start gap-3">
+                            <span class="text-oak">💎</span> <span data-key="unit_3br">Only 3 × 3BR left</span>
                         </h3>
-                        <p class="text-gray-400 mt-1" data-key="unit_3br_price">As low as $2,688,000 nett ($2,548 psf!)</p>
+                        <p class="text-stone-400 mt-2 font-light text-sm tracking-wide" data-key="unit_3br_price">As low as $2,688,000 nett ($2,548 psf!)</p>
                     </div>
-                    <a href="https://wa.me/6591860119?text=Interested%20in%203BR%20at%202.688m" class="px-6 py-2 bg-gold-500 text-white hover:bg-gold-400 rounded transition text-sm font-bold uppercase shadow-lg shadow-gold-500/20" data-key="secure_now">Secure Now</a>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%203BR%20at%202.688m" class="w-full md:w-auto px-8 py-3 bg-oak text-white hover:bg-oak-light rounded-none transition text-xs font-semibold uppercase tracking-[0.15em] shadow-lg" data-key="secure_now">Secure Now</a>
                 </div>
 
                 <!-- Unit Type 3 -->
-                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500">
-                    <div class="mb-4 md:mb-0">
-                        <h3 class="text-xl font-bold flex items-center gap-2">
-                            💎 <span data-key="unit_4br">Rare 4BR #15-02 (1,249 sqft)</span>
+                <div class="bg-white/5 rounded-none p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between border-l-2 border-oak hover:bg-white/10 transition duration-500 text-center md:text-left">
+                    <div class="mb-6 md:mb-0">
+                        <h3 class="text-xl sm:text-2xl font-serif font-light flex items-center justify-center md:justify-start gap-3">
+                            <span class="text-oak">💎</span> <span data-key="unit_4br">Rare 4BR #15-02 (1,249 sqft)</span>
                         </h3>
-                        <p class="text-gray-400 mt-1" data-key="unit_4br_price">$3,505,000 VIP, open to serious offers!</p>
+                        <p class="text-stone-400 mt-2 font-light text-sm tracking-wide" data-key="unit_4br_price">$3,505,000 VIP, open to serious offers!</p>
                     </div>
-                    <a href="https://wa.me/6591860119?text=Interested%20in%204BR%2015-02" class="px-6 py-2 border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white rounded transition text-sm font-bold uppercase" data-key="make_offer">Make Offer</a>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%204BR%2015-02" class="w-full md:w-auto px-8 py-3 border border-oak text-oak hover:bg-oak hover:text-white rounded-none transition text-xs font-semibold uppercase tracking-[0.15em]" data-key="make_offer">Make Offer</a>
                 </div>
             </div>
             
-            <div class="mt-12 text-center">
-                <p class="text-xl mb-6 italic text-gray-300" data-key="closing_cta">Secure your dream home (and the best price of the year) before they’re gone!</p>
-                <a href="https://wa.me/6591860119" class="bg-green-600 hover:bg-green-700 text-white text-lg font-bold py-4 px-10 rounded-full shadow-2xl inline-flex items-center gap-3 transition transform hover:scale-105">
-                    <i class="fab fa-whatsapp text-2xl"></i>
+            <div class="mt-16 sm:mt-20 text-center">
+                <p class="text-lg sm:text-xl mb-8 font-serif italic text-stone-400 font-light px-4" data-key="closing_cta">Secure your dream home (and the best price of the year) before they’re gone!</p>
+                <a href="https://wa.me/6591860119" class="bg-oak hover:bg-oak-light text-white text-lg font-medium py-4 px-12 rounded-none shadow-2xl inline-flex items-center gap-4 transition transform hover:scale-105 uppercase tracking-widest text-xs w-full sm:w-auto justify-center">
+                    <i class="fab fa-whatsapp text-xl"></i>
                     <span>91860119 Kar Loon | ERA</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Video Modal (Simulation) -->
-    <div id="videoModal" class="fixed inset-0 z-[60] hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg max-w-lg w-full p-6 text-center relative shadow-2xl transition-all duration-300">
-            <button onclick="closeModal()" class="absolute -top-10 right-0 md:top-2 md:right-4 text-white md:text-gray-400 hover:text-gray-800 text-3xl md:text-2xl z-50">&times;</button>
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 z-[60] hidden bg-matte/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-none max-w-lg w-full p-6 sm:p-8 text-center relative shadow-2xl transition-all duration-300 border border-stone-200">
+            <button onclick="closeModal()" class="absolute -top-12 right-0 md:top-2 md:right-4 text-white md:text-stone-400 hover:text-matte text-4xl md:text-2xl z-50 font-light">&times;</button>
             
             <div class="mb-2">
-                <h3 class="text-xl font-bold text-gray-900 mb-4" id="modalTitle">Video Tour</h3>
+                <h3 class="text-xl sm:text-2xl font-serif font-light text-matte mb-6 tracking-wide" id="modalTitle">Video Tour</h3>
                 
-                <!-- Video Container -->
-                <div id="videoContainer" class="hidden w-full bg-black rounded-lg overflow-hidden shadow-inner h-[60vh]">
+                <div id="videoContainer" class="hidden w-full bg-black rounded-none overflow-hidden shadow-inner h-[40vh] sm:h-[60vh]">
                     <iframe id="youtubeFrame" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
 
-                <!-- Request Container (Default/Fallback) -->
                 <div id="requestContainer">
-                    <i class="fas fa-video text-4xl text-gold-500 mb-4 block mx-auto"></i>
-                    <p class="text-gray-600 mb-6" data-key="modal_msg">To maintain owner privacy, full high-definition video walkthroughs are available upon request via WhatsApp.</p>
-                    <div class="flex flex-col gap-3">
-                        <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20please%20send%20me%20the%20video%20tour!" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg w-full flex justify-center items-center gap-2 transition transform hover:scale-105">
-                            <i class="fab fa-whatsapp"></i> <span data-key="modal_btn">Request Video Now</span>
+                    <i class="fas fa-video text-5xl text-oak mb-6 block mx-auto opacity-80"></i>
+                    <p class="text-matte-light mb-8 font-light leading-relaxed text-sm sm:text-base" data-key="modal_msg">To maintain owner privacy, full high-definition video walkthroughs are available upon request via WhatsApp.</p>
+                    <div class="flex flex-col gap-4">
+                        <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20please%20send%20me%20the%20video%20tour!" class="bg-oak hover:bg-oak-dark text-white font-semibold py-4 rounded-none w-full flex justify-center items-center gap-3 transition transform hover:scale-105 uppercase tracking-widest text-xs">
+                            <i class="fab fa-whatsapp text-lg"></i> <span data-key="modal_btn">Request Video Now</span>
                         </a>
-                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-sm underline">Close</button>
+                        <button onclick="closeModal()" class="text-gray-400 hover:text-matte text-xs uppercase tracking-widest underline">Close</button>
                     </div>
                 </div>
             </div>
@@ -290,22 +468,25 @@
     </div>
 
     <!-- Floating Mobile WhatsApp -->
-    <a href="https://wa.me/6591860119" class="md:hidden fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl z-40 animate-pulse">
+    <a href="https://wa.me/6591860119" class="md:hidden fixed bottom-6 right-6 bg-matte text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl z-40 animate-pulse border border-stone-400">
         <i class="fab fa-whatsapp"></i>
     </a>
 
     <script>
+        // Global state for language
+        let currentLang = 'en';
+
+        // --- TRANSLATIONS (Unchanged) ---
         const translations = {
             en: {
-                mascot_msg: "Ho Ho Ho! Best Prices!",
                 badge: "Limited Xmas Offer",
                 headline_1: "Christmas Bonus Gifts",
                 headline_2: "+ Final Units at Sanctuary @ Newton!",
-                subheadline: "Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11!",
+                subheadline: "Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11.",
                 cta_units: "View Available Units",
                 cta_contact: "Contact Kar Loon",
                 promo_title: "FLASH DEAL",
-                promo_desc: "🔥 Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)",
+                promo_desc: "Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)",
                 video_title: "Actual Unit Previews",
                 video_warmth: "\"A sneak peek at our featured homes. We have more units available for you to explore.\"",
                 type_3br: "3-Bedroom",
@@ -331,15 +512,14 @@
                 modal_btn: "Request Video Now"
             },
             cn: {
-                mascot_msg: "圣诞快乐！最优价格！",
                 badge: "圣诞限时大放送",
                 headline_1: "圣诞大礼包",
                 headline_2: "+ Sanctuary @ Newton 绝版单位！",
-                subheadline: "手快有手慢无！第11区永久地契，最后上车机会！",
+                subheadline: "手快有手慢无！第11区永久地契，最后上车机会。",
                 cta_units: "查看剩余房源",
                 cta_contact: "联系 Kar Loon",
                 promo_title: "限时捡漏",
-                promo_desc: "🔥 最后几间 VIP 折扣 + 圣诞额外红包（仅限 12月1日-15日！）",
+                promo_desc: "最后几间 VIP 折扣 + 圣诞额外红包（仅限 12月1日-15日！）",
                 video_title: "现房实拍 (视频)",
                 video_warmth: "“这里只是部分精选单位。还有更多选择，马上联系我看房！”",
                 type_3br: "3卧单位",
@@ -367,6 +547,7 @@
         };
 
         function setLang(lang) {
+            currentLang = lang; // Update global state
             const elements = document.querySelectorAll('[data-key]');
             elements.forEach(el => {
                 const key = el.getAttribute('data-key');
@@ -375,24 +556,22 @@
                 }
             });
 
-            // Update button styles
             const btnEn = document.getElementById('btn-en');
             const btnCn = document.getElementById('btn-cn');
 
             if (lang === 'en') {
-                btnEn.classList.add('bg-gold-500', 'text-white', 'border-transparent');
-                btnEn.classList.remove('text-gray-900', 'border-gray-300');
-                btnCn.classList.remove('bg-gold-500', 'text-white', 'border-transparent');
-                btnCn.classList.add('text-gray-900', 'border-gray-300');
+                btnEn.classList.add('bg-oak', 'text-white', 'border-transparent');
+                btnEn.classList.remove('text-oak', 'border-stone-200');
+                btnCn.classList.remove('bg-oak', 'text-white', 'border-transparent');
+                btnCn.classList.add('text-oak', 'border-stone-200');
             } else {
-                btnCn.classList.add('bg-gold-500', 'text-white', 'border-transparent');
-                btnCn.classList.remove('text-gray-900', 'border-gray-300');
-                btnEn.classList.remove('bg-gold-500', 'text-white', 'border-transparent');
-                btnEn.classList.add('text-gray-900', 'border-gray-300');
+                btnCn.classList.add('bg-oak', 'text-white', 'border-transparent');
+                btnCn.classList.remove('text-oak', 'border-stone-200');
+                btnEn.classList.remove('bg-oak', 'text-white', 'border-transparent');
+                btnEn.classList.add('text-oak', 'border-stone-200');
             }
         }
 
-        // Initialize English
         setLang('en');
 
         // Modal Logic
@@ -404,21 +583,15 @@
             const modalBox = document.querySelector('#videoModal > div');
 
             if (videoId) {
-                // Show Video
                 videoContainer.classList.remove('hidden');
                 requestContainer.classList.add('hidden');
                 youtubeFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
-                
-                // Expand modal for better viewing
                 modalBox.classList.remove('max-w-lg');
-                modalBox.classList.add('max-w-2xl'); // Wider for video
+                modalBox.classList.add('max-w-2xl');
             } else {
-                // Show Request Form
                 videoContainer.classList.add('hidden');
                 requestContainer.classList.remove('hidden');
                 youtubeFrame.src = "";
-                
-                // Shrink modal for text
                 modalBox.classList.add('max-w-lg');
                 modalBox.classList.remove('max-w-2xl');
             }
@@ -427,16 +600,158 @@
 
         function closeModal() {
             document.getElementById('videoModal').classList.add('hidden');
-            document.getElementById('youtubeFrame').src = ""; // Stop playback
+            document.getElementById('youtubeFrame').src = "";
         }
 
-        // Close modal on outside click
         window.onclick = function(event) {
             const modal = document.getElementById('videoModal');
             if (event.target == modal) {
                 closeModal();
             }
         }
+
+        // --- ALARM LOGIC + SYNC ---
+        function syncMascot() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const mascotContainer = document.getElementById('mascotContainer');
+            const mascotRotator = document.getElementById('mascotRotator');
+            
+            mascotContainer.style.animationDelay = `-${seconds}s`;
+            mascotRotator.style.animationDelay = `-${seconds}s`;
+        }
+        syncMascot();
+
+        setInterval(() => {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const rotator = document.getElementById('mascotRotator');
+            const bubble = document.getElementById('alarmBubble');
+
+            if (minutes === 0 && seconds < 5) {
+                if (!rotator.classList.contains('is-alarming')) {
+                    rotator.classList.add('is-alarming');
+                    bubble.innerText = `It's ${hours}:00!`;
+                    // Reset styling to center
+                    bubble.className = "mascot-alarm-bubble";
+                    bubble.style.opacity = '1';
+                }
+            } else {
+                if (rotator.classList.contains('is-alarming')) {
+                    rotator.classList.remove('is-alarming');
+                    bubble.style.opacity = '0';
+                }
+            }
+        }, 1000);
+
+        // --- MASCOT INTERACTION (JUMP & SMART BUBBLE) ---
+        const mascotContainer = document.getElementById('mascotContainer');
+        const mascotSvg = document.getElementById('mascotSvg');
+        const jumpBubble = document.getElementById('alarmBubble'); // Reuse bubble
+
+        // Bilingual Giggle Phrases
+        const gigglePhrases = {
+            en: [
+                "Aiyo, so ticklish!",
+                "Help me!",
+                "I can't take it anymore!",
+                "Spare me!",
+                "Don't touch that spot!",
+                "Laughing to death!",
+                "Twisted like a pretzel!",
+                "It tickles so much!",
+                "Stomach hurts!",
+                "Surrender surrender!"
+            ],
+            cn: [
+                "哎哟好痒哈哈哈！",
+                "救命啊嘻嘻嘻！",
+                "不行了不行了嘿嘿！",
+                "饶了我吧哈哈哈！",
+                "别弄那里咯咯咯！",
+                "笑死我了呵呵呵！",
+                "扭成麻花哈哈哈！",
+                "痒死人啦嘻嘻！",
+                "肚子痛啦哈哈哈！",
+                "投降投降嘿嘿嘿！"
+            ]
+        };
+
+        function triggerJump() {
+            if (!mascotSvg.classList.contains('is-jumping')) {
+                // 1. Start Jump Animation
+                mascotSvg.classList.add('is-jumping');
+                
+                // 2. Select Random Phrase based on Current Language
+                const phrases = gigglePhrases[currentLang];
+                const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+                
+                // 3. Smart Positioning Logic
+                // Always position the bubble "inwards" towards the center of the screen
+                const rect = mascotContainer.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const screenW = window.innerWidth;
+                const screenH = window.innerHeight;
+
+                // Reset classes
+                jumpBubble.className = "mascot-alarm-bubble";
+
+                // Calculate distance to center
+                const distX = Math.abs(centerX - screenW / 2);
+                const distY = Math.abs(centerY - screenH / 2);
+
+                // If closer to vertical edge than horizontal edge (Left/Right Walls)
+                // Use screen proportion to decide if it's on a side wall or top/bottom
+                // Simple logic: if x is very close to 0 or width, it's a side wall.
+                
+                if (distX / screenW > distY / screenH) {
+                    // Closer to Left/Right edges
+                    if (centerX < screenW / 2) {
+                        jumpBubble.classList.add('bubble-right'); // On Left wall -> Bubble to Right
+                    } else {
+                        jumpBubble.classList.add('bubble-left'); // On Right wall -> Bubble to Left
+                    }
+                } else {
+                    // Closer to Top/Bottom edges
+                    if (centerY < screenH / 2) {
+                        jumpBubble.classList.add('bubble-bottom'); // On Top wall -> Bubble Below
+                    } else {
+                        jumpBubble.classList.add('bubble-top'); // On Bottom wall -> Bubble Above
+                    }
+                }
+                
+                // 4. Show Bubble
+                jumpBubble.innerText = randomPhrase;
+                jumpBubble.style.opacity = '1';
+
+                // 5. Reset animations
+                setTimeout(() => {
+                    mascotSvg.classList.remove('is-jumping');
+                }, 800); 
+
+                setTimeout(() => {
+                    // Only hide if not currently alarming
+                    const rotator = document.getElementById('mascotRotator');
+                    if (!rotator.classList.contains('is-alarming')) {
+                        jumpBubble.style.opacity = '0';
+                    } else {
+                        const now = new Date();
+                        jumpBubble.innerText = `It's ${now.getHours()}:00!`;
+                        jumpBubble.className = "mascot-alarm-bubble"; // Reset position to center for alarm
+                    }
+                }, 1500); 
+            }
+        }
+
+        mascotContainer.addEventListener('mouseenter', triggerJump); // Desktop Hover
+        mascotContainer.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            triggerJump();
+        }); // Mobile Tap
+
     </script>
 </body>
 </html>
