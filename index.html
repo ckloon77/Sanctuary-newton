@@ -32,49 +32,6 @@
         }
     </script>
     <style>
-        .gradient-text {
-            background: linear-gradient(to right, #C5A028, #E5C568, #C5A028);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero-bg {
-            /* Background: A subtle luxury texture/view to sit BEHIND the building */
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1519750783826-e2420f4d687f?q=80&w=2000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        /* BUILDING CUTOUT LAYER 
-           This sits on top of the hero background but behind the text.
-           It fades out at the top using mask-image.
-        */
-        .hero-building {
-            /* Placeholder Building Image - REPLACE THIS URL with your transparent PNG or building photo */
-            background-image: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=1000&auto=format&fit=crop');
-            background-size: contain; /* Ensures the whole building width fits */
-            background-repeat: no-repeat;
-            background-position: center bottom; /* Anchors building to bottom */
-            
-            /* The Mask: Fades the image from opaque at bottom to transparent at top */
-            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 90%);
-            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 90%);
-        }
-
-        .video-overlay {
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-        }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #C5A028; 
-            border-radius: 4px;
-        }
         /* Mascot Animation */
         @keyframes float {
             0% { transform: translateY(0px) rotate(0deg); }
@@ -84,9 +41,54 @@
         .mascot-container {
             animation: float 3s ease-in-out infinite;
         }
+
+        /* Hide and Seek Mascot */
+        @keyframes peek {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-15px) rotate(0deg); }
+        }
+        .mascot-peek {
+            animation: peek 4s ease-in-out infinite;
+        }
+
+        /* Walking Mascot Animation */
+        @keyframes walk-across {
+            0% { left: -150px; transform: scaleX(1); }
+            45% { left: calc(100% - 150px); transform: scaleX(1); }
+            50% { left: calc(100% - 150px); transform: scaleX(-1); }
+            95% { left: -150px; transform: scaleX(-1); }
+            100% { left: -150px; transform: scaleX(1); }
+        }
+        .mascot-walking {
+            position: fixed;
+            bottom: 20px;
+            width: 150px;
+            z-index: 40;
+            animation: walk-across 20s linear infinite;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
     </style>
 </head>
 <body class="font-sans text-gray-800 bg-gray-50 antialiased">
+
+    <!-- Hide and Seek Santa Mascot (Removed for new walking mascot) -->
+    <!-- <div class="fixed bottom-4 -left-8 z-50 w-32 md:w-40 mascot-peek pointer-events-none transition-transform hover:translate-y-[-20px]">
+        ...
+    </div> -->
+
+    <!-- Walking Now Choong Santa Mascot -->
+    <div class="mascot-walking">
+        <!-- Santa Hat Overlay -->
+        <div class="absolute -top-10 left-10 w-24 z-20 transform -rotate-12 filter drop-shadow-lg">
+             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 70 C 20 70 50 10 80 30 C 90 40 95 75 95 75" fill="#D42426" />
+                <path d="M15 70 L 95 70 L 95 85 L 15 85 Z" fill="#FFFFFF" rx="5" />
+                <circle cx="80" cy="30" r="12" fill="#FFFFFF" />
+             </svg>
+        </div>
+        <!-- Now Choong Mascot Image -->
+        <img src="Now Choong Mascot.jpg" alt="Now Choong Mascot" class="w-full h-full drop-shadow-2xl relative z-10">
+    </div>
 
     <!-- Navigation / Language Toggle -->
     <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
@@ -110,34 +112,8 @@
     <!-- Hero Section -->
     <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
         
-        <!-- Seamless Building Overlay -->
-        <!-- This layer holds the building image and sits at the bottom -->
-        <div class="absolute bottom-0 left-0 w-full h-[85%] hero-building z-0 pointer-events-none opacity-90"></div>
-
-        <!-- Now Choong Mascot -->
-        <div class="absolute bottom-4 left-4 md:left-20 z-10 w-40 md:w-56 mascot-container">
-            <!-- Speech Bubble -->
-            <div class="absolute -top-12 -right-8 bg-white p-2 rounded-xl rounded-bl-none shadow-lg text-[10px] md:text-xs font-bold transform rotate-3 animate-pulse text-gray-800 border-2 border-gold-500 z-30">
-                <span data-key="mascot_msg">Ho Ho Ho! Best Prices!</span>
-            </div>
-
-            <!-- Santa Hat Overlay -->
-            <div class="absolute -top-10 left-6 w-24 z-20 transform -rotate-12 filter drop-shadow-lg pointer-events-none">
-                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 70 C 20 70 50 10 80 30 C 90 40 95 75 95 75" fill="#D42426" />
-                    <path d="M15 70 L 95 70 L 95 85 L 15 85 Z" fill="#FFFFFF" rx="5" />
-                    <circle cx="80" cy="30" r="12" fill="#FFFFFF" />
-                 </svg>
-            </div>
-            
-            <!-- 3D Mascot Image (Using Embedded SVG Fallback for robustness) -->
-            <img 
-                src="Gemini_Generated_Image_n6el2fn6el2fn6el.jpg" 
-                alt="Now Choong Mascot" 
-                class="w-full h-full drop-shadow-2xl relative z-10"
-                onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBjbGFzcz0iZHJvcC1zaGFkb3ctMnhsIHctZnVsbCBoLWZ1bGwgZmlsdGVyIGRyb3Atc2hhZG93LWxnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdvbGRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkNSMzREO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iNTAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRDk3NzA2O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzkyNDBFO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJmYWNlR3JhZCIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIiBmeD0iMzAlIiBmeT0iMzAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iOTAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZTVlN2ViO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2QxZDVkYjtzdG9wLW9wYWNpdHk6MSIgLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYm9keVJpbSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNCNDUzMDk7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNGNTlFMEI7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNzgzNTBGO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0zMCA4MCBBIDMwIDI1IDAgMCAxIDcwIDUwIiBmaWxsPSJ1cmwoI2dvbGRHcmFkKSIgc3Ryb2tlPSIjNzgzNTBGIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNMTMwIDUwIEEgMzAgMjUgMCAwIDEgMTcwIDgwIiBmaWxsPSJ1cmwoI2dvbGRHcmFkKSIgc3Ryb2tlPSIjNzgzNTBGIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNNzAgNTAgUSAxMDAgMjAgMTMwIDUwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZEdyYWQpIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEzMCIgcj0iNzAiIGZpbGw9InVybCgjYm9keVJpbSkiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMzAiIHI9IjYyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiNGNTlFMEIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEzMCIgcj0iNjAiIGZpbGw9InVybCgjZmFjZUdyYWQpIi8+PGVsbGlXBzZSBjeD0iNjAiIGN5PSIxOTUiIHJ4PSIxNSIgcnk9IjEwIiBmaWxsPSIjMGU3NDkwIi8+PGVsbGlXBzZSBjeD0iMTQwIiBjeT0iMTk1IiByeD0iMTUiIHJ5PSIxMCIgZmlsbD0iIzBlNzQ5MCIvPjxnIHN0cm9rZT0iIzFGMjkzNyIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMykiPjxjaXJjbGUgY3g9Ijc1IiBjeT0iMTI1IiByPSIxOCIvPjxjaXJjbGUgY3g9IjEyNSIgY3k9IjEyNSIgcj0iMTgiLz48bGluZSB4MT0iOTMiIHkxPSIxMjUiIHgyPSIxMDciIHkyPSIxMjUiLz48L2c+PGNpcmNsZSBjeD0iNzUiIGN5PSIxMjUiIHI9IjQiIGZpbGw9IiMxRjI5MzciLz48cGF0aCBkPSJNmMTE4IDEyNSBRIDEyNSAxMjAgMTMyIDEyNSIgc3Ryb2tlPSIjMUYyOTM3IiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNODUgMTUwIFEgMTAwIDE2MCAxMTUgMTUwIiBzdHJva2U9IiMxRjI5MzciIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMwIDE0MCBRIDEwIDE2MCAyNSAxODAiIHN0cm9rZT0iIzBlNzQ5MCIgc3Ryb2tlLXdpZHRoPSI2IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTcwIDE0MCBRIDE5MCAxMjAgMTg1IDEwMCIgc3Ryb2tlPSIjMGU3NDkwIiBzdHJva2Utd2lkdGg9IjYiIGZpbGw9Im5vbmUiLz48L3N2Zz4='"
-            >
-        </div>
+        <!-- Seamless Building Overlay (Disabled as main BG is now the hero shot) -->
+        <!-- <div class="absolute bottom-0 left-0 w-full h-[85%] hero-building z-0 pointer-events-none opacity-90"></div> -->
 
         <div class="absolute top-24 right-4 animate-bounce">
             <span class="bg-xmas-red text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">
@@ -183,10 +159,10 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Video Card 1: #04-01 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
-                    <!-- Image 1: Spacious Living Room -->
-                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800&auto=format&fit=crop" 
+                    <!-- Image 1: Left Crop -->
+                    <img src="sanctuary poolside.jpg" 
                          alt="Living Room" 
-                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                         class="w-full h-80 object-cover object-left transform group-hover:scale-110 transition duration-700">
                     
                     <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
                         <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
@@ -201,10 +177,10 @@
 
                 <!-- Video Card 2: #04-03 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
-                     <!-- Image 2: Cozy Bedroom -->
-                    <img src="https://images.unsplash.com/photo-1616594039964-40891a909d99?q=80&w=800&auto=format&fit=crop" 
+                     <!-- Image 2: Center Crop -->
+                    <img src="sanctuary poolside.jpg" 
                          alt="Bedroom" 
-                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                         class="w-full h-80 object-cover object-center transform group-hover:scale-110 transition duration-700">
                     
                     <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
                         <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
@@ -219,10 +195,10 @@
 
                 <!-- Video Card 3: #11-02 -->
                 <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
-                     <!-- Image 3: Balcony/View -->
-                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop" 
+                     <!-- Image 3: Right Crop -->
+                    <img src="sanctuary poolside.jpg" 
                          alt="Balcony" 
-                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                         class="w-full h-80 object-cover object-right transform group-hover:scale-110 transition duration-700">
                     
                     <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
                         <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
@@ -363,7 +339,6 @@
     <script>
         const translations = {
             en: {
-                mascot_msg: "Ho Ho Ho! Best Prices!",
                 badge: "Limited Xmas Offer",
                 headline_1: "Christmas Bonus Gifts",
                 headline_2: "+ Final Units at Sanctuary @ Newton!",
@@ -397,7 +372,6 @@
                 modal_btn: "Request Video Now"
             },
             cn: {
-                mascot_msg: "圣诞快乐！最优价格！",
                 badge: "限时圣诞优惠",
                 headline_1: "圣诞额外礼遇",
                 headline_2: "+ Sanctuary @ Newton 最后几套！",
