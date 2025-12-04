@@ -32,63 +32,36 @@
         }
     </script>
     <style>
-        /* Mascot Animation */
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
+        .gradient-text {
+            background: linear-gradient(to right, #C5A028, #E5C568, #C5A028);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .mascot-container {
-            animation: float 3s ease-in-out infinite;
+        .hero-bg {
+            /* Background: Using the uploaded sanctuary hero shot with a stronger overlay for legibility */
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('sanctuary hero shot.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: scroll; 
         }
-
-        /* Hide and Seek Mascot */
-        @keyframes peek {
-            0%, 100% { transform: translateY(0) rotate(-5deg); }
-            50% { transform: translateY(-15px) rotate(0deg); }
+        
+        .video-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
         }
-        .mascot-peek {
-            animation: peek 4s ease-in-out infinite;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        /* Walking Mascot Animation */
-        @keyframes walk-across {
-            0% { left: -150px; transform: scaleX(1); }
-            45% { left: calc(100% - 150px); transform: scaleX(1); }
-            50% { left: calc(100% - 150px); transform: scaleX(-1); }
-            95% { left: -150px; transform: scaleX(-1); }
-            100% { left: -150px; transform: scaleX(1); }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
         }
-        .mascot-walking {
-            position: fixed;
-            bottom: 20px;
-            width: 150px;
-            z-index: 40;
-            animation: walk-across 20s linear infinite;
-            pointer-events: none; /* Allows clicks to pass through */
+        ::-webkit-scrollbar-thumb {
+            background: #C5A028; 
+            border-radius: 4px;
         }
     </style>
 </head>
 <body class="font-sans text-gray-800 bg-gray-50 antialiased">
-
-    <!-- Hide and Seek Santa Mascot (Removed for new walking mascot) -->
-    <!-- <div class="fixed bottom-4 -left-8 z-50 w-32 md:w-40 mascot-peek pointer-events-none transition-transform hover:translate-y-[-20px]">
-        ...
-    </div> -->
-
-    <!-- Walking Now Choong Santa Mascot -->
-    <div class="mascot-walking">
-        <!-- Santa Hat Overlay -->
-        <div class="absolute -top-10 left-10 w-24 z-20 transform -rotate-12 filter drop-shadow-lg">
-             <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 70 C 20 70 50 10 80 30 C 90 40 95 75 95 75" fill="#D42426" />
-                <path d="M15 70 L 95 70 L 95 85 L 15 85 Z" fill="#FFFFFF" rx="5" />
-                <circle cx="80" cy="30" r="12" fill="#FFFFFF" />
-             </svg>
-        </div>
-        <!-- Now Choong Mascot Image -->
-        <img src="Now Choong Mascot.jpg" alt="Now Choong Mascot" class="w-full h-full drop-shadow-2xl relative z-10">
-    </div>
 
     <!-- Navigation / Language Toggle -->
     <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
@@ -112,9 +85,6 @@
     <!-- Hero Section -->
     <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
         
-        <!-- Seamless Building Overlay (Disabled as main BG is now the hero shot) -->
-        <!-- <div class="absolute bottom-0 left-0 w-full h-[85%] hero-building z-0 pointer-events-none opacity-90"></div> -->
-
         <div class="absolute top-24 right-4 animate-bounce">
             <span class="bg-xmas-red text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">
                 <i class="fas fa-gift mr-1"></i> <span data-key="badge">Limited Xmas Offer</span>
@@ -158,56 +128,44 @@
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Video Card 1: #04-01 -->
-                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
-                    <!-- Image 1: Left Crop -->
-                    <img src="sanctuary poolside.jpg" 
-                         alt="Living Room" 
-                         class="w-full h-80 object-cover object-left transform group-hover:scale-110 transition duration-700">
-                    
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
-                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
+                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
+                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-regular fa-map text-4xl text-gold-500 group-hover:text-white"></i>
                         </div>
+                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#04-01</h3>
+                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_3br">3-Bedroom</p>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
-                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#04-01</h3>
-                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_3br">3-Bedroom</p>
+                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
+                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
                     </div>
                 </div>
 
                 <!-- Video Card 2: #04-03 -->
-                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
-                     <!-- Image 2: Center Crop -->
-                    <img src="sanctuary poolside.jpg" 
-                         alt="Bedroom" 
-                         class="w-full h-80 object-cover object-center transform group-hover:scale-110 transition duration-700">
-                    
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
-                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
+                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
+                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-solid fa-layer-group text-4xl text-gold-500 group-hover:text-white"></i>
                         </div>
+                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#04-03</h3>
+                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_2br">2-Bedroom</p>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
-                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#04-03</h3>
-                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_2br">2-Bedroom</p>
+                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
+                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
                     </div>
                 </div>
 
                 <!-- Video Card 3: #11-02 -->
-                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
-                     <!-- Image 3: Right Crop -->
-                    <img src="sanctuary poolside.jpg" 
-                         alt="Balcony" 
-                         class="w-full h-80 object-cover object-right transform group-hover:scale-110 transition duration-700">
-                    
-                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
-                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
-                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                <div class="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 shadow-lg cursor-pointer hover:shadow-2xl hover:border-gold-400 transition-all duration-300" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
+                    <div class="h-64 flex flex-col items-center justify-center p-8 bg-white">
+                        <div class="w-24 h-24 rounded-full bg-gold-50 flex items-center justify-center mb-4 group-hover:bg-gold-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-solid fa-ruler-combined text-4xl text-gold-500 group-hover:text-white"></i>
                         </div>
+                        <h3 class="text-gray-900 font-bold text-2xl tracking-wide group-hover:text-gold-600 transition">#11-02</h3>
+                        <p class="text-gray-500 text-sm uppercase tracking-widest mt-1 font-semibold" data-key="type_2br">2-Bedroom</p>
                     </div>
-                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
-                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#11-02</h3>
-                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_2br">2-Bedroom</p>
+                    <div class="bg-gray-100 p-3 text-center border-t border-gray-200 group-hover:bg-gold-500 group-hover:text-white transition-colors">
+                        <span class="text-xs font-bold uppercase tracking-widest"><i class="fas fa-play-circle mr-2"></i> Watch Video Tour</span>
                     </div>
                 </div>
             </div>
@@ -339,6 +297,7 @@
     <script>
         const translations = {
             en: {
+                mascot_msg: "Ho Ho Ho! Best Prices!",
                 badge: "Limited Xmas Offer",
                 headline_1: "Christmas Bonus Gifts",
                 headline_2: "+ Final Units at Sanctuary @ Newton!",
@@ -372,35 +331,36 @@
                 modal_btn: "Request Video Now"
             },
             cn: {
-                badge: "限时圣诞优惠",
-                headline_1: "圣诞额外礼遇",
-                headline_2: "+ Sanctuary @ Newton 最后几套！",
-                subheadline: "仅剩少量单位 —— 这是您拥有第11区尊贵永久地契珍宝的最后机会！",
-                cta_units: "查看剩余单位",
+                mascot_msg: "圣诞快乐！最优价格！",
+                badge: "圣诞限时大放送",
+                headline_1: "圣诞大礼包",
+                headline_2: "+ Sanctuary @ Newton 绝版单位！",
+                subheadline: "手快有手慢无！第11区永久地契，最后上车机会！",
+                cta_units: "查看剩余房源",
                 cta_contact: "联系 Kar Loon",
-                promo_title: "限时特惠",
-                promo_desc: "🔥 最后几套单位享受VIP折扣 + 额外圣诞红利折扣（仅限12月1日至15日！）",
-                video_title: "现房实拍预览",
-                video_warmth: "“精选现房预览。欢迎联系我们探索更多户型。”",
+                promo_title: "限时捡漏",
+                promo_desc: "🔥 最后几间 VIP 折扣 + 圣诞额外红包（仅限 12月1日-15日！）",
+                video_title: "现房实拍 (视频)",
+                video_warmth: "“这里只是部分精选单位。还有更多选择，马上联系我看房！”",
                 type_3br: "3卧单位",
                 type_2br: "2卧单位",
-                request_video: "通过WhatsApp查看完整视频列表",
-                usp_1: "现房参观",
+                request_video: "通过 WhatsApp 索取完整视频列表",
+                usp_1: "随时看房",
                 usp_1_desc: "现房参观开放中，欢迎预约。",
-                usp_2: "诚意卖家",
-                usp_2_desc: "真正的卖家诚意价，快速成交。",
-                usp_3: "节日折扣",
+                usp_2: "屋主诚售",
+                usp_2_desc: "价格好商量，只求快成交！",
+                usp_3: "节日大红包",
                 usp_3_desc: "立即预订享额外节日折扣。",
-                units_title: "最后库存",
+                units_title: "最后房源",
                 unit_2br: "最后4套两卧单位",
                 unit_2br_desc: "Stack 2 开放报价！",
                 unit_3br: "仅剩3套三卧",
                 unit_3br_price: "净价低至 $2,688,000 ($2,548 psf!)",
                 unit_4br: "稀缺四卧 #15-02 (1,249 sqft)",
                 unit_4br_price: "VIP价 $3,505,000，欢迎诚意出价！",
-                make_offer: "出价",
-                secure_now: "立即锁定",
-                closing_cta: "在售罄前锁定您的梦想家园（及年度最优价格）！",
+                make_offer: "立即出价",
+                secure_now: "马上预定",
+                closing_cta: "错过不再有！趁这波优惠，赶紧锁定您的梦想家园！",
                 modal_msg: "为保护业主隐私，完整高清看房视频请通过WhatsApp索取。",
                 modal_btn: "立即索取视频"
             }
