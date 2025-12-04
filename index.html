@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sanctuary @ Newton | Exclusive Freehold</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#D4AF37',
+                            500: '#C5A028',
+                            600: '#B49018',
+                        },
+                        xmas: {
+                            red: '#D42426',
+                            green: '#165B33'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Lato"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .gradient-text {
+            background: linear-gradient(to right, #C5A028, #E5C568, #C5A028);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-bg {
+            /* Background: A subtle luxury texture/view to sit BEHIND the building */
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1519750783826-e2420f4d687f?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        /* BUILDING CUTOUT LAYER 
+           This sits on top of the hero background but behind the text.
+           It fades out at the top using mask-image.
+        */
+        .hero-building {
+            /* Placeholder Building Image - REPLACE THIS URL with your transparent PNG or building photo */
+            background-image: url('https://images.unsplash.com/photo-1580587771525-78b9dba3b91d?q=80&w=1000&auto=format&fit=crop');
+            background-size: contain; /* Ensures the whole building width fits */
+            background-repeat: no-repeat;
+            background-position: center bottom; /* Anchors building to bottom */
+            
+            /* The Mask: Fades the image from opaque at bottom to transparent at top */
+            mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 90%);
+            -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,0) 90%);
+        }
+
+        .video-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C5A028; 
+            border-radius: 4px;
+        }
+        /* Mascot Animation */
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .mascot-container {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-gray-50 antialiased">
+
+    <!-- Navigation / Language Toggle -->
+    <nav class="fixed w-full z-50 bg-white/95 backdrop-blur-md shadow-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <span class="text-2xl font-serif font-bold text-gray-900 tracking-wider">SANCTUARY<span class="text-gold-500">@NEWTON</span></span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="setLang('en')" class="px-3 py-1 text-sm font-semibold rounded-full border border-gray-300 hover:border-gold-500 hover:text-gold-500 transition active-lang" id="btn-en">EN</button>
+                    <button onclick="setLang('cn')" class="px-3 py-1 text-sm font-semibold rounded-full border border-gray-300 hover:border-gold-500 hover:text-gold-500 transition" id="btn-cn">中文</button>
+                    <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20I'm%20interested%20in%20Sanctuary%20@%20Newton" class="hidden md:flex bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg items-center gap-2 transition shadow-lg transform hover:scale-105">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                        <span>WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-bg h-screen flex items-center justify-center text-center px-4 relative overflow-hidden">
+        
+        <!-- Seamless Building Overlay -->
+        <!-- This layer holds the building image and sits at the bottom -->
+        <div class="absolute bottom-0 left-0 w-full h-[85%] hero-building z-0 pointer-events-none opacity-90"></div>
+
+        <!-- Now Choong Mascot -->
+        <div class="absolute bottom-4 left-4 md:left-20 z-10 w-40 md:w-56 mascot-container">
+            <!-- Speech Bubble -->
+            <div class="absolute -top-12 -right-8 bg-white p-2 rounded-xl rounded-bl-none shadow-lg text-[10px] md:text-xs font-bold transform rotate-3 animate-pulse text-gray-800 border-2 border-gold-500 z-30">
+                <span data-key="mascot_msg">Ho Ho Ho! Best Prices!</span>
+            </div>
+
+            <!-- Santa Hat Overlay -->
+            <div class="absolute -top-10 left-6 w-24 z-20 transform -rotate-12 filter drop-shadow-lg pointer-events-none">
+                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 70 C 20 70 50 10 80 30 C 90 40 95 75 95 75" fill="#D42426" />
+                    <path d="M15 70 L 95 70 L 95 85 L 15 85 Z" fill="#FFFFFF" rx="5" />
+                    <circle cx="80" cy="30" r="12" fill="#FFFFFF" />
+                 </svg>
+            </div>
+            
+            <!-- 3D Mascot Image (Using Embedded SVG Fallback for robustness) -->
+            <img 
+                src="Gemini_Generated_Image_n6el2fn6el2fn6el.jpg" 
+                alt="Now Choong Mascot" 
+                class="w-full h-full drop-shadow-2xl relative z-10"
+                onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjAwIDI0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBjbGFzcz0iZHJvcC1zaGFkb3ctMnhsIHctZnVsbCBoLWZ1bGwgZmlsdGVyIGRyb3Atc2hhZG93LWxnIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImdvbGRHcmFkIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRkNSMzREO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iNTAlIiBzdHlsZT0ic3RvcC1jb2xvcjojRDk3NzA2O3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6IzkyNDBFO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PHJhZGlhbEdyYWRpZW50IGlkPSJmYWNlR3JhZCIgY3g9IjUwJSIgY3k9IjUwJSIgcj0iNTAlIiBmeD0iMzAlIiBmeT0iMzAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmZmZmZmO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iOTAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZTVlN2ViO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2QxZDVkYjtzdG9wLW9wYWNpdHk6MSIgLz48L3JhZGlhbEdyYWRpZW50PjxsaW5lYXJHcmFkaWVudCBpZD0iYm9keVJpbSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNCNDUzMDk7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSI1MCUiIHN0eWxlPSJzdG9wLWNvbG9yOiNGNTlFMEI7c3RvcC1vcGFjaXR5OjEiIC8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdHlsZT0ic3RvcC1jb2xvcjojNzgzNTBGO3N0b3Atb3BhY2l0eToxIiAvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGQ9Ik0zMCA4MCBBIDMwIDI1IDAgMCAxIDcwIDUwIiBmaWxsPSJ1cmwoI2dvbGRHcmFkKSIgc3Ryb2tlPSIjNzgzNTBGIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNMTMwIDUwIEEgMzAgMjUgMCAwIDEgMTcwIDgwIiBmaWxsPSJ1cmwoI2dvbGRHcmFkKSIgc3Ryb2tlPSIjNzgzNTBGIiBzdHJva2Utd2lkdGg9IjEiLz48cGF0aCBkPSJNNzAgNTAgUSAxMDAgMjAgMTMwIDUwIiBmaWxsPSJub25lIiBzdHJva2U9InVybCgjZ29sZEdyYWQpIiBzdHJva2Utd2lkdGg9IjgiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEzMCIgcj0iNzAiIGZpbGw9InVybCgjYm9keVJpbSkiLz48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMzAiIHI9IjYyIiBmaWxsPSIjZmZmIiBzdHJva2U9IiNGNTlFMEIiIHN0cm9rZS13aWR0aD0iMiIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjEzMCIgcj0iNjAiIGZpbGw9InVybCgjZmFjZUdyYWQpIi8+PGVsbGlXBzZSBjeD0iNjAiIGN5PSIxOTUiIHJ4PSIxNSIgcnk9IjEwIiBmaWxsPSIjMGU3NDkwIi8+PGVsbGlXBzZSBjeD0iMTQwIiBjeT0iMTk1IiByeD0iMTUiIHJ5PSIxMCIgZmlsbD0iIzBlNzQ5MCIvPjxnIHN0cm9rZT0iIzFGMjkzNyIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMykiPjxjaXJjbGUgY3g9Ijc1IiBjeT0iMTI1IiByPSIxOCIvPjxjaXJjbGUgY3g9IjEyNSIgY3k9IjEyNSIgcj0iMTgiLz48bGluZSB4MT0iOTMiIHkxPSIxMjUiIHgyPSIxMDciIHkyPSIxMjUiLz48L2c+PGNpcmNsZSBjeD0iNzUiIGN5PSIxMjUiIHI9IjQiIGZpbGw9IiMxRjI5MzciLz48cGF0aCBkPSJNmMTE4IDEyNSBRIDEyNSAxMjAgMTMyIDEyNSIgc3Ryb2tlPSIjMUYyOTM3IiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiLz48cGF0aCBkPSJNODUgMTUwIFEgMTAwIDE2MCAxMTUgMTUwIiBzdHJva2U9IiMxRjI5MzciIHN0cm9rZS13aWR0aD0iMyIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PHBhdGggZD0iTTMwIDE0MCBRIDEwIDE2MCAyNSAxODAiIHN0cm9rZT0iIzBlNzQ5MCIgc3Ryb2tlLXdpZHRoPSI2IiBmaWxsPSJub25lIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48cGF0aCBkPSJNMTcwIDE0MCBRIDE5MCAxMjAgMTg1IDEwMCIgc3Ryb2tlPSIjMGU3NDkwIiBzdHJva2Utd2lkdGg9IjYiIGZpbGw9Im5vbmUiLz48L3N2Zz4='"
+            >
+        </div>
+
+        <div class="absolute top-24 right-4 animate-bounce">
+            <span class="bg-xmas-red text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg uppercase tracking-wide">
+                <i class="fas fa-gift mr-1"></i> <span data-key="badge">Limited Xmas Offer</span>
+            </span>
+        </div>
+        
+        <div class="max-w-4xl mx-auto text-white relative z-10" data-aos="fade-up">
+            <h1 class="text-4xl md:text-6xl font-serif font-bold mb-6 leading-tight drop-shadow-lg">
+                <span data-key="headline_1">Christmas Bonus Gifts</span> <br/>
+                <span class="text-gold-400" data-key="headline_2">+ Final Units at Sanctuary @ Newton!</span>
+            </h1>
+            <p class="text-lg md:text-xl font-light mb-8 opacity-90 max-w-2xl mx-auto drop-shadow-md" data-key="subheadline">
+                Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11!
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#units" class="bg-gold-500 hover:bg-gold-600 text-white font-bold py-4 px-8 rounded-lg shadow-xl transition transform hover:-translate-y-1">
+                    <i class="fas fa-home mr-2"></i> <span data-key="cta_units">View Available Units</span>
+                </a>
+                <a href="https://wa.me/6591860119" class="bg-white/10 backdrop-blur-sm border border-white hover:bg-white hover:text-gray-900 text-white font-bold py-4 px-8 rounded-lg shadow-xl transition transform hover:-translate-y-1">
+                    <i class="fas fa-phone mr-2"></i> <span data-key="cta_contact">Contact Kar Loon</span>
+                </a>
+            </div>
+            
+            <div class="mt-12 p-4 bg-white/10 backdrop-blur-md rounded-xl inline-block border border-white/20">
+                <p class="text-gold-300 font-bold uppercase tracking-widest text-sm mb-2" data-key="promo_title">Flash Deal</p>
+                <p class="font-semibold text-white" data-key="promo_desc">🔥 Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Video/Visuals Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4" data-key="video_title">Actual Unit Previews</h2>
+                <div class="w-24 h-1 bg-gold-500 mx-auto rounded-full"></div>
+                <p class="mt-6 text-xl text-gray-600 italic font-serif" data-key="video_warmth">
+                    "A sneak peek at our featured homes. We have more units available for you to explore."
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Video Card 1: #04-01 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-01 3-Bedroom', 'tswQTMgSMKY')">
+                    <!-- Image 1: Spacious Living Room -->
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=800&auto=format&fit=crop" 
+                         alt="Living Room" 
+                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                    
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
+                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
+                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#04-01</h3>
+                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_3br">3-Bedroom</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 2: #04-03 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#04-03 2-Bedroom', 'v8iHRGW2_tA')">
+                     <!-- Image 2: Cozy Bedroom -->
+                    <img src="https://images.unsplash.com/photo-1616594039964-40891a909d99?q=80&w=800&auto=format&fit=crop" 
+                         alt="Bedroom" 
+                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                    
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
+                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
+                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#04-03</h3>
+                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_2br">2-Bedroom</p>
+                    </div>
+                </div>
+
+                <!-- Video Card 3: #11-02 -->
+                <div class="group relative overflow-hidden rounded-2xl shadow-2xl cursor-pointer" onclick="openModal('#11-02 2-Bedroom', 'ST1nyLv6QrI')">
+                     <!-- Image 3: Balcony/View -->
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=800&auto=format&fit=crop" 
+                         alt="Balcony" 
+                         class="w-full h-80 object-cover transform group-hover:scale-110 transition duration-700">
+                    
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
+                        <div class="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition">
+                            <i class="fas fa-play text-gold-500 text-2xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 video-overlay text-center">
+                        <h3 class="text-gold-400 font-bold text-2xl tracking-wide">#11-02</h3>
+                        <p class="text-white text-lg font-light uppercase tracking-wider" data-key="type_2br">2-Bedroom</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="https://wa.me/6591860119?text=Can%20send%20me%20the%20actual%20unit%20videos%20for%20Sanctuary?" class="inline-flex items-center text-gray-400 font-bold hover:text-gold-600 transition text-sm">
+                    <span data-key="request_video">See full video list via WhatsApp</span> <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Selling Points -->
+    <section class="py-16 bg-gray-50 border-y border-gray-200">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2" data-key="usp_1">Actual Viewing</h3>
+                    <p class="text-gray-500 text-sm" data-key="usp_1_desc">Actual unit viewing available now onsite.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-gold-100 text-gold-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2" data-key="usp_2">Motivated Seller</h3>
+                    <p class="text-gray-500 text-sm" data-key="usp_2_desc">Genuine motivated seller pricing for fast deal.</p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-xmas-red text-white text-[10px] px-2 py-1 font-bold">DEC 1-15</div>
+                    <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2" data-key="usp_3">Festive Discount</h3>
+                    <p class="text-gray-500 text-sm" data-key="usp_3_desc">Additional festive discount for immediate bookings.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Units Section -->
+    <section id="units" class="py-20 bg-gray-900 text-white">
+        <div class="max-w-5xl mx-auto px-4">
+            <h2 class="text-3xl font-serif font-bold text-center mb-12 text-gold-400" data-key="units_title">Final Inventory</h2>
+            
+            <div class="space-y-6">
+                <!-- Unit Type 1 -->
+                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            💎 <span data-key="unit_2br">Final 4 × 2BR units</span>
+                        </h3>
+                        <p class="text-gray-400 mt-1" data-key="unit_2br_desc">Stack 2 open for offers!</p>
+                    </div>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%202BR%20Stack%202" class="px-6 py-2 border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white rounded transition text-sm font-bold uppercase" data-key="make_offer">Make Offer</a>
+                </div>
+
+                <!-- Unit Type 2 -->
+                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500 relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 bg-xmas-red w-20 h-20 transform rotate-45"></div>
+                    <div class="absolute top-1 right-1 text-white text-xs font-bold"><i class="fas fa-star"></i></div>
+                    
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            💎 <span data-key="unit_3br">Only 3 × 3BR left</span>
+                        </h3>
+                        <p class="text-gray-400 mt-1" data-key="unit_3br_price">As low as $2,688,000 nett ($2,548 psf!)</p>
+                    </div>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%203BR%20at%202.688m" class="px-6 py-2 bg-gold-500 text-white hover:bg-gold-400 rounded transition text-sm font-bold uppercase shadow-lg shadow-gold-500/20" data-key="secure_now">Secure Now</a>
+                </div>
+
+                <!-- Unit Type 3 -->
+                <div class="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between border-l-4 border-gold-500">
+                    <div class="mb-4 md:mb-0">
+                        <h3 class="text-xl font-bold flex items-center gap-2">
+                            💎 <span data-key="unit_4br">Rare 4BR #15-02 (1,249 sqft)</span>
+                        </h3>
+                        <p class="text-gray-400 mt-1" data-key="unit_4br_price">$3,505,000 VIP, open to serious offers!</p>
+                    </div>
+                    <a href="https://wa.me/6591860119?text=Interested%20in%204BR%2015-02" class="px-6 py-2 border border-gold-500 text-gold-500 hover:bg-gold-500 hover:text-white rounded transition text-sm font-bold uppercase" data-key="make_offer">Make Offer</a>
+                </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <p class="text-xl mb-6 italic text-gray-300" data-key="closing_cta">Secure your dream home (and the best price of the year) before they’re gone!</p>
+                <a href="https://wa.me/6591860119" class="bg-green-600 hover:bg-green-700 text-white text-lg font-bold py-4 px-10 rounded-full shadow-2xl inline-flex items-center gap-3 transition transform hover:scale-105">
+                    <i class="fab fa-whatsapp text-2xl"></i>
+                    <span>91860119 Kar Loon | ERA</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Video Modal (Simulation) -->
+    <div id="videoModal" class="fixed inset-0 z-[60] hidden bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-lg w-full p-6 text-center relative shadow-2xl transition-all duration-300">
+            <button onclick="closeModal()" class="absolute -top-10 right-0 md:top-2 md:right-4 text-white md:text-gray-400 hover:text-gray-800 text-3xl md:text-2xl z-50">&times;</button>
+            
+            <div class="mb-2">
+                <h3 class="text-xl font-bold text-gray-900 mb-4" id="modalTitle">Video Tour</h3>
+                
+                <!-- Video Container -->
+                <div id="videoContainer" class="hidden w-full bg-black rounded-lg overflow-hidden shadow-inner h-[60vh]">
+                    <iframe id="youtubeFrame" class="w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <!-- Request Container (Default/Fallback) -->
+                <div id="requestContainer">
+                    <i class="fas fa-video text-4xl text-gold-500 mb-4 block mx-auto"></i>
+                    <p class="text-gray-600 mb-6" data-key="modal_msg">To maintain owner privacy, full high-definition video walkthroughs are available upon request via WhatsApp.</p>
+                    <div class="flex flex-col gap-3">
+                        <a href="https://wa.me/6591860119?text=Hi%20Kar%20Loon,%20please%20send%20me%20the%20video%20tour!" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg w-full flex justify-center items-center gap-2 transition transform hover:scale-105">
+                            <i class="fab fa-whatsapp"></i> <span data-key="modal_btn">Request Video Now</span>
+                        </a>
+                        <button onclick="closeModal()" class="text-gray-500 hover:text-gray-800 text-sm underline">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Mobile WhatsApp -->
+    <a href="https://wa.me/6591860119" class="md:hidden fixed bottom-6 right-6 bg-green-500 text-white w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-3xl z-40 animate-pulse">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        const translations = {
+            en: {
+                mascot_msg: "Ho Ho Ho! Best Prices!",
+                badge: "Limited Xmas Offer",
+                headline_1: "Christmas Bonus Gifts",
+                headline_2: "+ Final Units at Sanctuary @ Newton!",
+                subheadline: "Only a handful left – this is your last chance to own a piece of this exclusive FREEHOLD gem in prime District 11!",
+                cta_units: "View Available Units",
+                cta_contact: "Contact Kar Loon",
+                promo_title: "FLASH DEAL",
+                promo_desc: "🔥 Last Few Units with VIP Discounts + Extra Xmas Bonus (1–15 Dec only!)",
+                video_title: "Actual Unit Previews",
+                video_warmth: "\"A sneak peek at our featured homes. We have more units available for you to explore.\"",
+                type_3br: "3-Bedroom",
+                type_2br: "2-Bedroom",
+                request_video: "See full video list via WhatsApp",
+                usp_1: "Actual Viewing",
+                usp_1_desc: "Actual unit viewing available now onsite.",
+                usp_2: "Motivated Seller",
+                usp_2_desc: "Genuine motivated seller pricing for fast deal.",
+                usp_3: "Festive Discount",
+                usp_3_desc: "Additional festive discount for immediate bookings.",
+                units_title: "Final Inventory",
+                unit_2br: "Final 4 × 2BR units",
+                unit_2br_desc: "Stack 2 open for offers!",
+                unit_3br: "Only 3 × 3BR left",
+                unit_3br_price: "As low as $2,688,000 nett ($2,548 psf!)",
+                unit_4br: "Rare 4BR #15-02 (1,249 sqft)",
+                unit_4br_price: "$3,505,000 VIP, open to serious offers!",
+                make_offer: "Make Offer",
+                secure_now: "Secure Now",
+                closing_cta: "Secure your dream home (and the best price of the year) before they’re gone!",
+                modal_msg: "To maintain owner privacy, full high-definition video walkthroughs are available upon request via WhatsApp.",
+                modal_btn: "Request Video Now"
+            },
+            cn: {
+                mascot_msg: "圣诞快乐！最优价格！",
+                badge: "限时圣诞优惠",
+                headline_1: "圣诞额外礼遇",
+                headline_2: "+ Sanctuary @ Newton 最后几套！",
+                subheadline: "仅剩少量单位 —— 这是您拥有第11区尊贵永久地契珍宝的最后机会！",
+                cta_units: "查看剩余单位",
+                cta_contact: "联系 Kar Loon",
+                promo_title: "限时特惠",
+                promo_desc: "🔥 最后几套单位享受VIP折扣 + 额外圣诞红利折扣（仅限12月1日至15日！）",
+                video_title: "现房实拍预览",
+                video_warmth: "“精选现房预览。欢迎联系我们探索更多户型。”",
+                type_3br: "3卧单位",
+                type_2br: "2卧单位",
+                request_video: "通过WhatsApp查看完整视频列表",
+                usp_1: "现房参观",
+                usp_1_desc: "现房参观开放中，欢迎预约。",
+                usp_2: "诚意卖家",
+                usp_2_desc: "真正的卖家诚意价，快速成交。",
+                usp_3: "节日折扣",
+                usp_3_desc: "立即预订享额外节日折扣。",
+                units_title: "最后库存",
+                unit_2br: "最后4套两卧单位",
+                unit_2br_desc: "Stack 2 开放报价！",
+                unit_3br: "仅剩3套三卧",
+                unit_3br_price: "净价低至 $2,688,000 ($2,548 psf!)",
+                unit_4br: "稀缺四卧 #15-02 (1,249 sqft)",
+                unit_4br_price: "VIP价 $3,505,000，欢迎诚意出价！",
+                make_offer: "出价",
+                secure_now: "立即锁定",
+                closing_cta: "在售罄前锁定您的梦想家园（及年度最优价格）！",
+                modal_msg: "为保护业主隐私，完整高清看房视频请通过WhatsApp索取。",
+                modal_btn: "立即索取视频"
+            }
+        };
+
+        function setLang(lang) {
+            const elements = document.querySelectorAll('[data-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-key');
+                if (translations[lang][key]) {
+                    el.innerText = translations[lang][key];
+                }
+            });
+
+            // Update button styles
+            const btnEn = document.getElementById('btn-en');
+            const btnCn = document.getElementById('btn-cn');
+
+            if (lang === 'en') {
+                btnEn.classList.add('bg-gold-500', 'text-white', 'border-transparent');
+                btnEn.classList.remove('text-gray-900', 'border-gray-300');
+                btnCn.classList.remove('bg-gold-500', 'text-white', 'border-transparent');
+                btnCn.classList.add('text-gray-900', 'border-gray-300');
+            } else {
+                btnCn.classList.add('bg-gold-500', 'text-white', 'border-transparent');
+                btnCn.classList.remove('text-gray-900', 'border-gray-300');
+                btnEn.classList.remove('bg-gold-500', 'text-white', 'border-transparent');
+                btnEn.classList.add('text-gray-900', 'border-gray-300');
+            }
+        }
+
+        // Initialize English
+        setLang('en');
+
+        // Modal Logic
+        function openModal(title, videoId = null) {
+            document.getElementById('modalTitle').innerText = title;
+            const videoContainer = document.getElementById('videoContainer');
+            const requestContainer = document.getElementById('requestContainer');
+            const youtubeFrame = document.getElementById('youtubeFrame');
+            const modalBox = document.querySelector('#videoModal > div');
+
+            if (videoId) {
+                // Show Video
+                videoContainer.classList.remove('hidden');
+                requestContainer.classList.add('hidden');
+                youtubeFrame.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+                
+                // Expand modal for better viewing
+                modalBox.classList.remove('max-w-lg');
+                modalBox.classList.add('max-w-2xl'); // Wider for video
+            } else {
+                // Show Request Form
+                videoContainer.classList.add('hidden');
+                requestContainer.classList.remove('hidden');
+                youtubeFrame.src = "";
+                
+                // Shrink modal for text
+                modalBox.classList.add('max-w-lg');
+                modalBox.classList.remove('max-w-2xl');
+            }
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('videoModal').classList.add('hidden');
+            document.getElementById('youtubeFrame').src = ""; // Stop playback
+        }
+
+        // Close modal on outside click
+        window.onclick = function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
